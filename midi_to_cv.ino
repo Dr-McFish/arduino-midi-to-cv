@@ -45,7 +45,7 @@ void setup()
 
   //timer nonsense
   pinMode(3, OUTPUT); // velocity
-  pinMode(11, OUTPUT); // Volt per octave
+  pinMode(11, OUTPUT); // Mod Wheel
   // ------------------------------------------------ TIMER 2 ------------------------------------------------
   //        Enable PWM pin D11             Enable PWM pin D3                Fast PWM mode
   //        Clear OC2A on compare match    Clear OC2B on compare match      TOP = 0xFF;
@@ -53,20 +53,20 @@ void setup()
   TCCR2A = _BV(COM2A1)                   | _BV(COM2B1)                     | _BV(WGM21) | _BV(WGM20);
   //        PRESCALER is set to 1 (62.5 kHz sheesh), more than 20
   TCCR2B = _BV(CS20); 
-  OCR2A = 180; // pin D11 PWM value (0-255)
-  OCR2B = 50;  // pin D3  PWM value (0-255)
+  OCR2A = 180; // pin D11 PWM value (0-255) (Mod)
+  OCR2B = 50;  // pin D3  PWM value (0-255) (velocity)
 
 
-  pinMode(9, OUTPUT);
+  pinMode(9, OUTPUT); // Volt per octave
   // ------------------------------------------------ TIMER 2 ------------------------------------------------
   //       Enable PWM out on pin D9(OC1A)     Fast PWM 10bit mode
   TCCR1A = _BV(COM1A1)                     | _BV(WGM11) | _BV(WGM10); //WGM12
   //        Fast PWM 10bit mode         prescaler of 1, 15,6kHz
   TCCR1B = _BV(WGM12)                | _BV(CS10);
-  OCR1A = 0; // pin D9 pwm value (0-1023)
+  OCR1A = 0; // pin D9 pwm value (0-1023) (v/oct)
 }
 
-void loop() 
+void loop()
 {
   MIDI.read();
 
@@ -93,6 +93,10 @@ void HandleNoteOn(byte channel, byte pitch, byte velocity)
     note_number_t nontenum = midinote_to_notemum(pitch);
 
     notes_on[nontenum] = true;
+
+    //(velocity)
+    OCR2B = velocity;  
+
   }
 }
 
@@ -102,13 +106,22 @@ void HandleNoteOff(byte channel, byte pitch, byte velocity)
     note_number_t nontenum = midinote_to_notemum(pitch);
 
     notes_on[nontenum] = false;
+
+    //(velocity)
+    //OCR2B = velocity;
   }
 }
 
 void HandleCC(byte channel, byte control_function, byte parameter) 
 {
   if(controller_channel == channel) {
-    
+    switch(control_function) {
+      default:
+        break;
+      case 1:// Mod wheel
+        OCR2A = ((unsigned byte)parameter) * 2;
+        break;
+    }
   }
 }
 
@@ -122,8 +135,8 @@ void HandlePitchBend(byte channel, int bend) {
 
 int note_to_volt_per_oct(byte note){
   int16_t pitch = note;
-  pitch *= 17;
-  //pitch /= 4;
+  pitch *= 341;
+  pitch = (pitch / 20) + ((pitch % 20) >= 10 ? 1 : 0);
   return pitch;
 }
 

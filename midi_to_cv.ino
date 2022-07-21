@@ -2,7 +2,7 @@
 #include <stdint.h>
 
 #define GATE_OPEN LOW
-#define GATE_CLOSED HIGH //because there is an inverting transistor stage after this
+#define GATE_CLOSED HIGH /*because there is an inverting transistor stage after this */
 
 #define MIN_NOTE 36 //note C2
 #define TOTAL_NOTES 61 // 5 octaves -> 12*5 = 60, plus 1 for the C that is 6 octaves above
@@ -121,7 +121,15 @@ void HandleCC(byte channel, byte control_function, byte parameter)
       case 1:// Mod wheel
         OCR2A = ((unsigned byte)parameter) * 2;
         break;
-    }
+      case 123: // All Notes (on/off)
+        if(parameter < 63) {
+          digitalWrite(gate_pin, GATE_CLOSED);
+          for(int i = 0; i < TOTAL_NOTES; i++)
+            notes_on[i] = 0;
+        } // why would it ever be usefull to turn all teh notes on?
+          // I am not implementing that
+        break;
+      }
   }
 }
 

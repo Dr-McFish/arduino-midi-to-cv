@@ -12,6 +12,7 @@ const int gate_pin = 12;
 const int led_pin = 13;
 byte controller_channel = 4;
 bool notes_on[TOTAL_NOTES];
+int pitchbend = 0;
 //TODO ^ replace this with bitshift magic,
 //wasting 7/8 of the memmory is driving my ocd insane
 
@@ -78,7 +79,8 @@ void loop()
   }
   digitalWrite(gate_pin, GATE_OPEN);
   //sets PWM on v/oct pin to the highest note
-  OCR1A = note_to_volt_per_oct(highest_note);
+  OCR1A = max(0, note_to_volt_per_oct(highest_note) + (pitchbend/40));
+  // /40 1 octave of pitchbend. | /240 whole tone pichbend
 }
 
 
@@ -95,7 +97,7 @@ void HandleNoteOn(byte channel, byte pitch, byte velocity)
     notes_on[nontenum] = true;
 
     //(velocity)
-    OCR2B = velocity;  
+    OCR2B = velocity * 2;  
 
   }
 }
@@ -134,7 +136,9 @@ void HandleCC(byte channel, byte control_function, byte parameter)
 }
 
 void HandlePitchBend(byte channel, int bend) {
-  if(controller_channel & 0x0F == channel);
+  if(controller_channel == channel){
+    pitchbend = bend;
+  }
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------

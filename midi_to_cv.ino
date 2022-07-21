@@ -17,7 +17,7 @@ bool notes_on[TOTAL_NOTES];
 
 MIDI_CREATE_DEFAULT_INSTANCE();
 
-byte note_to_volt_per_oct(byte note);
+int note_to_volt_per_oct(byte note);
 note_number_t midinote_to_notemum(byte midi_note);
 int highest_note_on(bool notes[]);
 
@@ -47,18 +47,23 @@ void setup()
   pinMode(3, OUTPUT); // velocity
   pinMode(11, OUTPUT); // Volt per octave
   // ------------------------------------------------ TIMER 2 ------------------------------------------------
-  //        Enable PWM pin 11              Enable PWM pin 3                 Fast PWM mode
+  //        Enable PWM pin D11             Enable PWM pin D3                Fast PWM mode
   //        Clear OC2A on compare match    Clear OC2B on compare match      TOP = 0xFF;
   //        set OC2A at BOTTOM             set OC2B at BOTTOM,              Update of OCRx at BOTTOM
   TCCR2A = _BV(COM2A1)                   | _BV(COM2B1)                     | _BV(WGM21) | _BV(WGM20);
   //        PRESCALER is set to 1 (62.5 kHz sheesh), more than 20
   TCCR2B = _BV(CS20); 
-  OCR2A = 180; // pin 11 PWM value (0=255)
-  OCR2B = 50;  // pin 3  PWM value (0=255)
+  OCR2A = 180; // pin D11 PWM value (0-255)
+  OCR2B = 50;  // pin D3  PWM value (0-255)
 
-  
-  //TCCR1A = _BV(COM2A1) | _BV(COM2B1) | _BV(WGM21) | _BV(WGM20);
-  //TCCR1B = _BV(CS20); // PRESCALER is set to 1 (62.5 kHz) 
+
+  pinMode(9, OUTPUT);
+  // ------------------------------------------------ TIMER 2 ------------------------------------------------
+  //       Enable PWM out on pin D9(OC1A)     Fast PWM 10bit mode
+  TCCR1A = _BV(COM1A1)                     | _BV(WGM11) | _BV(WGM10); //WGM12
+  //        Fast PWM 10bit mode         prescaler of 1, 15,6kHz
+  TCCR1B = _BV(WGM12)                | _BV(CS10);
+  OCR1A = 0; // pin D9 pwm value (0-1023)
 }
 
 void loop() 
@@ -73,7 +78,7 @@ void loop()
   }
   digitalWrite(gate_pin, GATE_OPEN);
   //sets PWM on v/oct pin to the highest note
-  OCR2B = note_to_volt_per_oct(highest_note);
+  OCR1A = note_to_volt_per_oct(highest_note);
 }
 
 
@@ -115,10 +120,10 @@ void HandlePitchBend(byte channel, int bend) {
 //
 // functions
 
-byte note_to_volt_per_oct(byte note){
+int note_to_volt_per_oct(byte note){
   int16_t pitch = note;
   pitch *= 17;
-  pitch /= 4;
+  //pitch /= 4;
   return pitch;
 }
 

@@ -1,15 +1,13 @@
 #include <MIDI.h>
 #include <stdint.h>
 
-#define GATE_OPEN LOW
-#define GATE_CLOSED HIGH /*because there is an inverting transistor stage after this */
-
 #define MIN_NOTE 36 //note C2
 #define TOTAL_NOTES 61 // 5 octaves -> 12*5 = 60, plus 1 for the C that is 6 octaves above
 typedef int note_number_t; /* 0 - 60; MIN_NOTE is 0 */
 
-const int gate_pin = 12;
-const int led_pin = 13;
+const int gate_pin = 12; // D12 -> pin PB4 on Atmega328p
+const int gate_pin_bitmask = 4; // bit 4 on the `PORTB` register
+
 byte controller_channel = 4;
 bool notes_on[TOTAL_NOTES];
 int pitchbend = 0;
@@ -42,7 +40,6 @@ void setup()
   controller_channel = 4;
 
   pinMode(gate_pin, OUTPUT);
-  pinMode(led_pin, OUTPUT);
 
   //timer nonsense
   pinMode(3, OUTPUT); // velocity
@@ -59,12 +56,14 @@ void setup()
 
 
   pinMode(9, OUTPUT); // Volt per octave
+  pinMode(10, OUTPUT); // Mod Wheel raw
   // ------------------------------------------------ TIMER 2 ------------------------------------------------
-  //       Enable PWM out on pin D9(OC1A)     Fast PWM 10bit mode
-  TCCR1A = _BV(COM1A1)                     | _BV(WGM11) | _BV(WGM10); //WGM12
+  //       Enable PWM out on pin D9(OC1A)    Enable PWM out on pin D10(OC1B)      Fast PWM 10bit mode
+  TCCR1A = _BV(COM1A1)                     | _BV(COM1B1)                        | _BV(WGM11) | _BV(WGM10); //WGM12
   //        Fast PWM 10bit mode         prescaler of 1, 15,6kHz
   TCCR1B = _BV(WGM12)                | _BV(CS10);
-  OCR1A = 0; // pin D9 pwm value (0-1023) (v/oct)
+  OCR1A = 0; // pin D9  pwm value (0-1023) (v/oct)
+  OCR1B = 0; // pin D10 pwm value (0-1023) (pitchbend)
 }
 
 void loop()
@@ -74,10 +73,11 @@ void loop()
   int highest_note = highest_note_on(notes_on);
 
   if (highest_note == -1) {
-    digitalWrite(gate_pin, GATE_CLOSED);
+    PORTB &= ~_BV(gate_pin_bitmask); // set gate pin high
     return;
   }
-  digitalWrite(gate_pin, GATE_OPEN);
+  PORTB |= _BV(gate_pin_bitmask); // set gate pin low
+  
   //sets PWM on v/oct pin to the highest note
   OCR1A = max(0, note_to_volt_per_oct(highest_note) + (pitchbend/40));
   // /40 1 octave of pitchbend. | /240 whole tone pichbend
@@ -120,24 +120,26 @@ void HandleCC(byte channel, byte control_function, byte parameter)
     switch(control_function) {
       default:
         break;
-      case 1:// Mod wheel
+      case midi::ModulationWheel : //MSB
         OCR2A = ((unsigned byte)parameter) * 2;
         break;
-      case 123: // All Notes (on/off)
-        if(parameter < 63) {
-          digitalWrite(gate_pin, GATE_CLOSED);
-          for(int i = 0; i < TOTAL_NOTES; i++)
-            notes_on[i] = 0;
-        } // why would it ever be usefull to turn all teh notes on?
-          // I am not implementing that
+      case midi::ModulationWheel + 32 : //LSB
+        OCR2A &= 0x11111110;
+        OCR2A |= parameter / 127;
         break;
-      }
+      case midi::AllNotesOff :
+        PORTB |= _BV(gate_pin_bitmask); // set gate pin low
+        for(int i = 0; i < TOTAL_NOTES; i++)
+            notes_on[i] = 0;
+        break;
+    }
   }
 }
 
 void HandlePitchBend(byte channel, int bend) {
   if(controller_channel == channel){
     pitchbend = bend;
+    OCR1B = (bend - MIDI_PITCHBEND_MIN)>>4;
   }
 }
 

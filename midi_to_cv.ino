@@ -1,7 +1,8 @@
 #include <MIDI.h>
 #include <U8glib.h>
-
 #include <stdint.h>
+
+#include "encoder.h"
 
 #define MIN_NOTE 36 //note C2
 #define TOTAL_NOTES 61 // 5 octaves -> 12*5 = 60, plus 1 for the C that is 6 octaves above
@@ -17,8 +18,8 @@ MIDI_CREATE_DEFAULT_INSTANCE();
 U8GLIB_SH1106_128X64 u8g(8, 7, 4); // SCK=13, MOSI=11, CS=8, DC=7, Reset=4
 
 
-const int gate_pin = 12; // D12 -> pin PB4 on Atmega328p
-const int gate_pin_bitmask = 4; // bit 4 on the `PORTB` register
+const int gate_pin = 4; // D4 -> pin PD4 on Atmega328p
+const int gate_pin_bitmask = 4; // bit 4 on the `PORTD` register
 
 int note_to_volt_per_oct(byte note);
 note_number_t midinote_to_notemum(byte midi_note);
@@ -44,10 +45,9 @@ void setup()
   controller_channel = 4;
 
   // ------------ display ------------ 
-  u8g.firstPage();  
-  do {
-    draw_text("hello");
-  } while( u8g.nextPage() );
+  draw_text("hello");
+  // ------------ encoder ------------ 
+  setup_encoder();
   
   pinMode(gate_pin, OUTPUT);
 
@@ -76,19 +76,33 @@ void setup()
 
 void loop()
 {
-  //MIDI.read();
+  MIDI.read();
 
+
+  switch (encoder_get()) {
+    case NEUTRAL_ST:
+      break;
+    case CCW_ST:
+      digitalWrite(gate_pin, HIGH);
+      draw_text("ccw");
+      break;
+    case CW_ST:
+      draw_text("cw");
+      break;
+  }
+
+  
   int highest_note = highest_note_on(notes_on);
 
   if (highest_note == -1) {
-    PORTB &= ~_BV(gate_pin_bitmask); // set gate pin high
-    return;
-  }
-  PORTB |= _BV(gate_pin_bitmask); // set gate pin low 
+    PORTD &= ~_BV(gate_pin_bitmask);
+  } else {
+    PORTD |= _BV(gate_pin_bitmask);
   
-  //sets PWM on v/oct pin to the highest note
-  OCR1A = max(0, note_to_volt_per_oct(highest_note) + (pitchbend/40));
-  // /40 1 octave of pitchbend. | /240 whole tone pichbend
+    //sets PWM on v/oct pin to the highest note
+    OCR1A = max(0, note_to_volt_per_oct(highest_note) + (pitchbend/40));
+    // /40 1 octave of pitchbend. | /240 whole tone pichbend
+  }
 }
 
 
@@ -136,7 +150,7 @@ void HandleCC(byte channel, byte control_function, byte parameter)
         OCR0A |= parameter / 127;
         break;
       case midi::AllNotesOff :
-        PORTB |= _BV(gate_pin_bitmask); // set gate pin low
+        PORTD |= _BV(gate_pin_bitmask); // set gate pin low
         for(int i = 0; i < TOTAL_NOTES; i++)
             notes_on[i] = 0;
         break;

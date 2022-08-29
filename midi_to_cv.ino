@@ -3,6 +3,7 @@
 #include <stdint.h>
 
 #include "encoder.h"
+#include "display.h"
 
 #define MIN_NOTE 36 //note C2
 #define TOTAL_NOTES 61 // 5 octaves -> 12*5 = 60, plus 1 for the C that is 6 octaves above
@@ -15,8 +16,6 @@ int pitchbend = 0;
 //wasting 7/8 of the memmory is driving my ocd insane
 
 MIDI_CREATE_DEFAULT_INSTANCE();
-U8GLIB_SH1106_128X64 u8g(8, 7, 4); // SCK=13, MOSI=11, CS=8, DC=7, Reset=4
-
 
 const int gate_pin = 4; // D4 -> pin PD4 on Atmega328p
 const int gate_pin_bitmask = 4; // bit 4 on the `PORTD` register
@@ -30,7 +29,6 @@ void HandleNoteOff(byte channel, byte pitch, byte velocity) ;
 void HandleCC(byte channel, byte control_function, byte parameter);
 void HandlePitchBend(byte channel, int bend);
 
-void draw_text(const char * txt);
 void setup() 
 {
   
@@ -187,12 +185,4 @@ int highest_note_on(bool notes[]) {
       rt = i;
 
   return rt;
-}
-
-void draw_text(const char * txt) {
-  u8g.firstPage();  
-  do {
-    u8g.setFont(u8g_font_unifont);  // select font
-    u8g.drawStr(0, 32, txt);  // put string of display at position X, Y
-  } while( u8g.nextPage() );
 }

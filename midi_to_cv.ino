@@ -29,6 +29,9 @@ void HandleNoteOff(byte channel, byte pitch, byte velocity) ;
 void HandleCC(byte channel, byte control_function, byte parameter);
 void HandlePitchBend(byte channel, int bend);
 
+inline void updateNoteAndGate();
+inline void updateMenu();
+
 void setup() 
 {
   
@@ -76,20 +79,11 @@ void loop()
 {
   MIDI.read();
 
+  updateNoteAndGate();
+  updateMenu();
+}
 
-  switch (encoder_get()) {
-    case NEUTRAL_ST:
-      break;
-    case CCW_ST:
-      digitalWrite(gate_pin, HIGH);
-      draw_text("ccw");
-      break;
-    case CW_ST:
-      draw_text("cw");
-      break;
-  }
-
-  
+inline void updateNoteAndGate() {
   int highest_note = highest_note_on(notes_on);
 
   if (highest_note == -1) {
@@ -103,6 +97,19 @@ void loop()
   }
 }
 
+inline void updateMenu() {
+  switch (encoder_get()) {
+    case NEUTRAL_ST:
+      break;
+    case CCW_ST:
+      digitalWrite(gate_pin, HIGH);
+      draw_text("ccw");
+      break;
+    case CW_ST:
+      draw_text("cw");
+      break;
+  }
+}
 
 //------------------------------------------------------------------------------------------------------------------------------------------
 //

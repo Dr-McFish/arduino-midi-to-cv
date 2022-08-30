@@ -2,14 +2,21 @@
 
 #include <stdint.h>
 
-#define BOOL_ARRAY_SIZE 4 /* 4*16 = 64 bits */
+#define BOOL_ARRAY_SIZE_BITS 64
 
-class Bool_array 
+typedef uint16_t bool_unit; //either uint16_t or uint8_t. unsure
+
+#define BOOL_ARRAY_SIZE (BOOL_ARRAY_SIZE_BITS/sizeof(bool_unit))
+
+class BoolArray 
 {
 public:
-	Bool_array ();
+	BoolArray ();
 	bool operator[](int idx);
-	void set(int idx, bool value);
+	void set(int idx);
+  void clear(int idx);
+  int lowest();
+  int highest();
 private:
-	uint16_t p_bools[BOOL_ARRAY_SIZE];
+	bool_unit p_bools[BOOL_ARRAY_SIZE];
 };

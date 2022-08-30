@@ -3,10 +3,10 @@
 
 #include "encoder.h"
 #include "display.h"
-#include "bool_array.hpp"
+#include "bool_array.h"
 
-#define MIN_NOTE 36 //note C2
-#define TOTAL_NOTES 61 // 5 octaves -> 12*5 = 60, plus 1 for the C that is 6 octaves above
+#define MIN_NOTE 36 /*note C2*/
+#define TOTAL_NOTES 61 /* 5 octaves -> 12*5 = 60, plus 1 for the C that is 6 octaves above */
 typedef int note_number_t; /* 0 - 60; MIN_NOTE is 0 */
 
 bool notes_on[TOTAL_NOTES];
@@ -214,7 +214,7 @@ int highest_note_on(bool notes[]) {
 }
 int lowest_note_on(bool notes[]) {
   int rt = -1;
-  for(int i = TOTAL_NOTES; i > 0; i--)
+  for(int i = TOTAL_NOTES-1; i >= 0; i--)
     if(notes[i])
       rt = i;
 

@@ -1,6 +1,7 @@
 /*******Interrupt-based Rotary Encoder Sketch*******
 by Simon Merrett, based on insight from Oleg Mazurov, Nick Gammon, rt, Steve Spence
-modified by Dr_McFish
+https://www.instructables.com/Improved-Arduino-Rotary-Encoder-Reading/
+modified a litle bit by Dr_McFish
 */
 #include "encoder.h"
 

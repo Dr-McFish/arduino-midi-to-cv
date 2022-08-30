@@ -1,15 +1,14 @@
 #include <MIDI.h>
-#include <U8glib.h>
 #include <stdint.h>
 
 #include "encoder.h"
 #include "display.h"
+#include "bool_array.hpp"
 
 #define MIN_NOTE 36 //note C2
 #define TOTAL_NOTES 61 // 5 octaves -> 12*5 = 60, plus 1 for the C that is 6 octaves above
 typedef int note_number_t; /* 0 - 60; MIN_NOTE is 0 */
 
-byte controller_channel = 4;
 bool notes_on[TOTAL_NOTES];
 int pitchbend = 0;
 //TODO ^ replace this with bitshift magic,
@@ -21,8 +20,9 @@ const int gate_pin = 4; // D4 -> pin PD4 on Atmega328p
 const int gate_pin_bitmask = 4; // bit 4 on the `PORTD` register
 
 int note_to_volt_per_oct(byte note);
-note_number_t midinote_to_notemum(byte midi_note);
+note_number_t midinote_to_notenum(byte midi_note);
 int highest_note_on(bool notes[]);
+int lowest_note_on(bool notes[]);
 
 void HandleNoteOn(byte channel, byte pitch, byte velocity);
 void HandleNoteOff(byte channel, byte pitch, byte velocity) ;
@@ -32,9 +32,21 @@ void HandlePitchBend(byte channel, int bend);
 inline void updateNoteAndGate();
 inline void updateMenu();
 
+struct settings_s{
+  int (*note_priority)(bool[]) = &highest_note_on;
+  int8_t pitch_bend_semitones = 12; // (0-12)
+  bool bend_guards = false;
+  bool Midi_Monitor = true;
+  bool retrigger =   false;
+  bool note_off_velocity = false;
+  byte controller_channel = 4; // (0-16/OMNI)
+  
+} settings;
+
+
 void setup() 
 {
-  
+  // ------------------------------------------------- MIDI -------------------------------------------------- 
   MIDI.begin(MIDI_CHANNEL_OMNI);
   
   // As of the MIDI Library v3.1, the lib uses C style function 
@@ -43,11 +55,10 @@ void setup()
   MIDI.setHandleControlChange(HandleCC);
   MIDI.setHandleNoteOff(HandleNoteOff);
   MIDI.setHandlePitchBend(HandlePitchBend);
-  controller_channel = 4;
 
-  // ------------ display ------------ 
+  // ------------------------------------------------ display ------------------------------------------------ 
   draw_text("hello");
-  // ------------ encoder ------------ 
+  // ------------------------------------------------ encoder ------------------------------------------------ 
   setup_encoder();
   
   pinMode(gate_pin, OUTPUT);
@@ -83,17 +94,18 @@ void loop()
   updateMenu();
 }
 
+// Loop subrutines
 inline void updateNoteAndGate() {
-  int highest_note = highest_note_on(notes_on);
+  int highest_note = (*settings.note_priority)(notes_on);
 
   if (highest_note == -1) {
     PORTD &= ~_BV(gate_pin_bitmask);
   } else {
     PORTD |= _BV(gate_pin_bitmask);
   
-    //sets PWM on v/oct pin to the highest note
-    OCR1A = max(0, note_to_volt_per_oct(highest_note) + (pitchbend/40));
-    // /40 1 octave of pitchbend. | /240 whole tone pichbend
+    //sets PWM on v/oct pin to the appropriate note
+    OCR1A = max(0, note_to_volt_per_oct(highest_note)
+                    + (pitchbend/(20 * settings.pitch_bend_semitones)));
   }
 }
 
@@ -117,9 +129,9 @@ inline void updateMenu() {
 
 
 void HandleNoteOn(byte channel, byte pitch, byte velocity) 
-{ 
-  if(controller_channel == channel) {
-    note_number_t nontenum = midinote_to_notemum(pitch);
+{
+  if(settings.controller_channel == channel) {
+    note_number_t nontenum = midinote_to_notenum(pitch);
 
     notes_on[nontenum] = true;
 
@@ -131,19 +143,19 @@ void HandleNoteOn(byte channel, byte pitch, byte velocity)
 
 void HandleNoteOff(byte channel, byte pitch, byte velocity) 
 {
-  if(controller_channel == channel) {
-    note_number_t nontenum = midinote_to_notemum(pitch);
+  if(settings.controller_channel == channel) {
+    note_number_t nontenum = midinote_to_notenum(pitch);
 
     notes_on[nontenum] = false;
 
-    //(velocity)
-    //OCR0B = velocity;
+    if(settings.note_off_velocity)
+      OCR0B = velocity;
   }
 }
 
 void HandleCC(byte channel, byte control_function, byte parameter) 
 {
-  if(controller_channel == channel) {
+  if(settings.controller_channel == channel) {
     switch(control_function) {
       default:
         break;
@@ -164,7 +176,7 @@ void HandleCC(byte channel, byte control_function, byte parameter)
 }
 
 void HandlePitchBend(byte channel, int bend) {
-  if(controller_channel == channel){
+  if(settings.controller_channel == channel){
     pitchbend = bend;
     OCR1B = (bend - MIDI_PITCHBEND_MIN)>>4;
   }
@@ -181,13 +193,28 @@ int note_to_volt_per_oct(byte note){
   return pitch;
 }
 
-note_number_t midinote_to_notemum(byte midi_note) {
-  return max(MIN_NOTE, min(MIN_NOTE + (12*5), midi_note)) - MIN_NOTE;
+note_number_t midinote_to_notenum(byte midi_note) {
+  int min_note = MIN_NOTE;
+  int max_note = MIN_NOTE  + (12*5);
+  if (settings.bend_guards) {
+    min_note += settings.pitch_bend_semitones;
+    max_note -= settings.pitch_bend_semitones;
+  }
+    
+  return max(min_note, min(max_note, midi_note)) - min_note;
 }
 
 int highest_note_on(bool notes[]) {
   int rt = -1;
   for(int i = 0; i < TOTAL_NOTES; i++)
+    if(notes[i])
+      rt = i;
+
+  return rt;
+}
+int lowest_note_on(bool notes[]) {
+  int rt = -1;
+  for(int i = TOTAL_NOTES; i > 0; i--)
     if(notes[i])
       rt = i;
 

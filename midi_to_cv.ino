@@ -3,17 +3,15 @@
 
 #include "encoder.h"
 #include "display.h"
-#include "bool_array.h"
+#include "bool_array.hpp"
 
 #define MIN_NOTE 36 /*note C2*/
 #define TOTAL_NOTES 61 /* 5 octaves -> 12*5 = 60, plus 1 for the C that is 6 octaves above */
 typedef int note_number_t; /* 0 - 60; MIN_NOTE is 0 */
 
-bool notes_on[TOTAL_NOTES];
 int pitchbend = 0;
-//TODO ^ replace this with bitshift magic,
-//wasting 7/8 of the memmory is driving my ocd insane
 
+BoolArray notes_on = BoolArray();
 MIDI_CREATE_DEFAULT_INSTANCE();
 
 const int gate_pin = 4; // D4 -> pin PD4 on Atmega328p
@@ -32,8 +30,9 @@ void HandlePitchBend(byte channel, int bend);
 inline void updateNoteAndGate();
 inline void updateMenu();
 
+enum note_priority_e{HIGHEST, LOWEST};
 struct settings_s{
-  int (*note_priority)(bool[]) = &highest_note_on;
+  enum note_priority_e note_priority = HIGHEST;
   int8_t pitch_bend_semitones = 12; // (0-12)
   bool bend_guards = false;
   bool Midi_Monitor = true;
@@ -96,16 +95,24 @@ void loop()
 
 // Loop subrutines
 inline void updateNoteAndGate() {
-  int highest_note = (*settings.note_priority)(notes_on);
+  int prioritized_note;
+  switch(settings.note_priority){
+    case HIGHEST:
+      prioritized_note = notes_on.highest();
+      break;
+    case LOWEST:
+      prioritized_note = notes_on.lowest();
+      break;
+  }
 
-  if (highest_note == -1) {
+  if (prioritized_note == -1) {
     PORTD &= ~_BV(gate_pin_bitmask);
   } else {
     PORTD |= _BV(gate_pin_bitmask);
   
     //sets PWM on v/oct pin to the appropriate note
-    OCR1A = max(0, note_to_volt_per_oct(highest_note)
-                    + (pitchbend/(20 * settings.pitch_bend_semitones)));
+    OCR1A = max(0, note_to_volt_per_oct(prioritized_note)
+                    + (pitchbend*settings.pitch_bend_semitones)/480 );
   }
 }
 
@@ -114,7 +121,6 @@ inline void updateMenu() {
     case NEUTRAL_ST:
       break;
     case CCW_ST:
-      digitalWrite(gate_pin, HIGH);
       draw_text("ccw");
       break;
     case CW_ST:
@@ -133,7 +139,7 @@ void HandleNoteOn(byte channel, byte pitch, byte velocity)
   if(settings.controller_channel == channel) {
     note_number_t nontenum = midinote_to_notenum(pitch);
 
-    notes_on[nontenum] = true;
+    notes_on.setb(nontenum);
 
     //(velocity)
     OCR0B = velocity * 2;  
@@ -146,7 +152,7 @@ void HandleNoteOff(byte channel, byte pitch, byte velocity)
   if(settings.controller_channel == channel) {
     note_number_t nontenum = midinote_to_notenum(pitch);
 
-    notes_on[nontenum] = false;
+    notes_on.clearb(nontenum);
 
     if(settings.note_off_velocity)
       OCR0B = velocity;
@@ -164,12 +170,11 @@ void HandleCC(byte channel, byte control_function, byte parameter)
         break;
       case midi::ModulationWheel + 32 : //LSB
         OCR0A &= 0x11111110;
-        OCR0A |= parameter / 127;
+        OCR0A |= parameter >> 6;
         break;
       case midi::AllNotesOff :
         PORTD |= _BV(gate_pin_bitmask); // set gate pin low
-        for(int i = 0; i < TOTAL_NOTES; i++)
-            notes_on[i] = 0;
+        notes_on.clear_all();
         break;
     }
   }

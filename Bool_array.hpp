@@ -13,8 +13,9 @@ class BoolArray
 public:
 	BoolArray ();
 	bool operator[](int idx);
-	void set(int idx);
-  void clear(int idx);
+	void setb(int idx);
+  void clearb(int idx);
+  void clear_all();
   int lowest();
   int highest();
 private:

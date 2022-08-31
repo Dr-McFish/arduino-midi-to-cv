@@ -4,6 +4,7 @@
 #include "encoder.h"
 #include "display.h"
 #include "bool_array.hpp"
+#include "settings.h"
 
 #define MIN_NOTE 36 /*note C2*/
 #define TOTAL_NOTES 61 /* 5 octaves -> 12*5 = 60, plus 1 for the C that is 6 octaves above */
@@ -16,6 +17,8 @@ MIDI_CREATE_DEFAULT_INSTANCE();
 
 const int gate_pin = 4; // D4 -> pin PD4 on Atmega328p
 const int gate_pin_bitmask = 4; // bit 4 on the `PORTD` register
+const int enc_btn_pin = A3;
+const int enc_btn_pin_bitmask = 3; //bit 3 on the `PORTC` register
 
 int note_to_volt_per_oct(byte note);
 note_number_t midinote_to_notenum(byte midi_note);
@@ -61,6 +64,7 @@ void setup()
   setup_encoder();
   
   pinMode(gate_pin, OUTPUT);
+  pinMode(A3, INPUT_PULLUP);
 
   pinMode(9, OUTPUT); // Volt per octave
   pinMode(10, OUTPUT); // Pitch Wheel raw
@@ -117,15 +121,14 @@ inline void updateNoteAndGate() {
 }
 
 inline void updateMenu() {
-  switch (encoder_get()) {
-    case NEUTRAL_ST:
-      break;
-    case CCW_ST:
-      draw_text("ccw");
-      break;
-    case CW_ST:
-      draw_text("cw");
-      break;
+  int ecncoder_dir = encoder_get();
+  static bool last_button = false;
+  bool button = ((~PINC) & _BV(enc_btn_pin_bitmask));
+  bool rising_edge = (!last_button) && button;
+  last_button = button;
+
+  if(ecncoder_dir || rising_edge){
+      display_options(ecncoder_dir, button);
   }
 }
 

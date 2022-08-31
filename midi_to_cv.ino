@@ -33,17 +33,7 @@ void HandlePitchBend(byte channel, int bend);
 inline void updateNoteAndGate();
 inline void updateMenu();
 
-enum note_priority_e{HIGHEST, LOWEST};
-struct settings_s{
-  enum note_priority_e note_priority = HIGHEST;
-  int8_t pitch_bend_semitones = 12; // (0-12)
-  bool bend_guards = false;
-  bool Midi_Monitor = true;
-  bool retrigger =   false;
-  bool note_off_velocity = false;
-  byte controller_channel = 4; // (0-16/OMNI)
-  
-} settings;
+struct settings_s settings = {HIGHEST, 12, false ,true, false, false, 4};
 
 
 void setup() 
@@ -58,7 +48,8 @@ void setup()
   MIDI.setHandleNoteOff(HandleNoteOff);
   MIDI.setHandlePitchBend(HandlePitchBend);
 
-  // ------------------------------------------------ display ------------------------------------------------ 
+  // ------------------------------------------------ display ------------------------------------------------
+  display_setup();
   draw_text("hello");
   // ------------------------------------------------ encoder ------------------------------------------------ 
   setup_encoder();
@@ -121,14 +112,25 @@ inline void updateNoteAndGate() {
 }
 
 inline void updateMenu() {
-  int ecncoder_dir = encoder_get();
+  int ecncoder_dir;
+  switch(encoder_get()){
+    case CW_ST:
+      ecncoder_dir = -1;
+      break;
+    case NEUTRAL_ST:
+      ecncoder_dir = 0;
+      break;
+    case CCW_ST:
+      ecncoder_dir = 1;
+      break;
+  }
   static bool last_button = false;
   bool button = ((~PINC) & _BV(enc_btn_pin_bitmask));
   bool rising_edge = (!last_button) && button;
   last_button = button;
 
   if(ecncoder_dir || rising_edge){
-      display_options(ecncoder_dir, button);
+      display_options(ecncoder_dir, button, &settings);
   }
 }
 

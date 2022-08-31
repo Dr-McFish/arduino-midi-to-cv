@@ -42,10 +42,10 @@ void PinB(){
   sei(); //restart interrupts
 }
 
-byte encoder_get() {
+enum ENCODER_STATE encoder_get() {
   cli();
   if (encoder_state != NEUTRAL_ST) {
-    byte temp = encoder_state;
+    enum ENCODER_STATE temp = encoder_state;
     encoder_state = NEUTRAL_ST;
     sei();
     return temp;

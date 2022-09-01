@@ -20,9 +20,6 @@ const uint8_t cursor_bitmap[] U8G_PROGMEM = {
 };
 
 void display_int(int num, int line_num, int left_egdge);
-int modulo(int x,int N){
-    return (x % N + N) %N;
-}
 
 void display_setup(){
   //u8g.setFont(u8g_font_unifont);
@@ -32,21 +29,24 @@ void display_setup(){
 
 
 void display_options(const struct settings_s* settings){
-  
+  int cursor_pos = settings->selected_option % MAX_LINES;
+  int current_page = settings->selected_option / MAX_LINES;
+
   u8g.firstPage();
   do {
     u8g.drawBitmapP( settings->is_editing ? 2 : 0, 
-                    4+ settings->selected_option*LINE_HIGHT, 
+                    4+ cursor_pos*LINE_HIGHT, 
                     1, 7, cursor_bitmap);
-    for(int i = 0; i < MAX_LINES; i++){
-      u8g.drawStr(LEFT_MARGIN, LINE_HIGHT * (i+1), settings_names[i]);
+    for(int i = current_page* MAX_LINES; i < min((current_page+1)* MAX_LINES, NUM_OF_SETTINGS_LINES); i++){
+      int j = (i % MAX_LINES) + 1;
+      u8g.drawStr(LEFT_MARGIN, LINE_HIGHT * j, settings_names[i]);
       switch(setting_type[i]){
         case ONOFF_LBL_ST:
-          u8g.drawStr(LEFT_MARGIN+ CHAR_WIDTH*10, LINE_HIGHT * (i + 1),
+          u8g.drawStr(LEFT_MARGIN+ CHAR_WIDTH*10, LINE_HIGHT * j,
                       settings->flags & _BV(i  - SETTINGS_NUM_OF_NUMS) ? onoff_labels[i][0]: onoff_labels[i][1]);
   		    break;
         case ONOFF_ST:
-  		    u8g.drawStr(LEFT_MARGIN+ CHAR_WIDTH*14, LINE_HIGHT * (i + 1),
+  		    u8g.drawStr(LEFT_MARGIN+ CHAR_WIDTH*14, LINE_HIGHT * j,
                       ( settings->flags & _BV(i - SETTINGS_NUM_OF_NUMS) ) ? " ON" : "OFF");
   		    break;
 	      case NUMBER_ST:

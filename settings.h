@@ -21,6 +21,7 @@ const char * settings_names[] ={
   "NoteOff vel",
   "Exit"
 };
+# define NUM_OF_SETTINGS_LINES (sizeof(settings_names)/sizeof(settings_names[0]))
 
 enum num_settings_e{
   MIDI_CHANNEL,

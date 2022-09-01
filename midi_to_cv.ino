@@ -33,7 +33,7 @@ void HandlePitchBend(byte channel, int bend);
 inline void updateNoteAndGate();
 inline void updateMenu();
 
-struct settings_s settings = {{4, 12}, 0b00010100, 0, false};
+struct settings_s settings = {{4, 12}, 0b00000100, 0, false};
 
 
 void setup() 

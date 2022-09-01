@@ -1,8 +1,8 @@
 #include "settings.h"
 
-
-void load_settings_from_EEPROM(struct settings_s* settings){}
-void save_settings_to_EEPROM(const struct settings_s* settings){}
+int modulo(int x,int N){
+    return (x % N + N) %N;
+}
 
 void edit_settings(int encoder_dir, bool encoder_button, struct settings_s* settings) {
   if (encoder_button){
@@ -14,8 +14,14 @@ void edit_settings(int encoder_dir, bool encoder_button, struct settings_s* sett
   }
   
   if(settings->is_editing){
-    settings->nums[settings->selected_option] = max(settings_num_ranges[settings->selected_option].min, min(settings_num_ranges[settings->selected_option].max, settings->nums[settings->selected_option] + encoder_dir));
+    settings->nums[settings->selected_option] = 
+                  max(settings_num_ranges[settings->selected_option].min,
+                       min(settings_num_ranges[settings->selected_option].max, 
+                            settings->nums[settings->selected_option] + encoder_dir));
   } else {
-    settings->selected_option = modulo(settings->selected_option + encoder_dir, MAX_LINES);
+    settings->selected_option = modulo(settings->selected_option + encoder_dir, NUM_OF_SETTINGS_LINES);
   }
 }
+
+void load_settings_from_EEPROM(struct settings_s* settings){}
+void save_settings_to_EEPROM(const struct settings_s* settings){}

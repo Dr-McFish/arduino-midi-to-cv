@@ -19,6 +19,7 @@ const uint8_t cursor_bitmap[] U8G_PROGMEM = {
   0b01000000
 };
 
+void display_int(int num, int line_num, int left_egdge);
 int modulo(int x,int N){
     return (x % N + N) %N;
 }
@@ -35,36 +36,17 @@ void display_options(int encoder_dir, bool encoder_button, struct settings_s* se
   static bool is_editing;
 
   if (encoder_button){
-    switch(selected_option){
-      default:
-        break;
-      case 0: //note priority
-        settings->note_priority = settings->note_priority == HIGHEST ? LOWEST : HIGHEST;
-        break;
-      case 1://Pitch bend in semitones
+    if (setting_type[selected_option] == NUMBER_ST)
         is_editing = is_editing != encoder_button; /* XOR to flip the value */
-        break;
-      case 2: //bend guards
-        settings->bend_guards = settings->bend_guards != true;
-        break;
-      case 3: //Midi_Monitor
-        settings->Midi_Monitor = settings->Midi_Monitor != true;
-        break;
-      case 4: //retrigger
-        settings->retrigger = settings->retrigger != true;
-        break;
+    else if (setting_type[selected_option] == ONOFF_ST || setting_type[selected_option] == ONOFF_LBL_ST){
+      settings->flags ^= _BV((selected_option - SETTINGS_NUM_OF_NUMS)); // ^ XOR to flip the flag
     }
   }
-  if(!is_editing){
-    selected_option = modulo(selected_option + encoder_dir, MAX_LINES);
+  
+  if(is_editing){
+    settings->nums[selected_option] = max(settings_num_ranges[selected_option].min, min(settings_num_ranges[selected_option].max, settings->nums[selected_option] + encoder_dir));
   } else {
-    switch(selected_option){
-      default:
-        break;
-      case 1://Pitch bend in semitones
-        settings->pitch_bend_semitones = max(0, min(12, settings->pitch_bend_semitones + encoder_dir));
-        break;
-    }
+    selected_option = modulo(selected_option + encoder_dir, MAX_LINES);
   }
   
   u8g.firstPage();
@@ -74,24 +56,30 @@ void display_options(int encoder_dir, bool encoder_button, struct settings_s* se
                     1, 7, cursor_bitmap);
     for(int i = 0; i < MAX_LINES; i++){
       u8g.drawStr(LEFT_MARGIN, LINE_HIGHT * (i+1), settings_names[i]);
+      switch(setting_type[i]){
+        case ONOFF_LBL_ST:
+          u8g.drawStr(LEFT_MARGIN+ CHAR_WIDTH*10, LINE_HIGHT * (i + 1), settings->flags & _BV(i  - SETTINGS_NUM_OF_NUMS) ? onoff_labels[i][0]: onoff_labels[i][1]);
+  		    break;
+        case ONOFF_ST:
+  		    u8g.drawStr(LEFT_MARGIN+ CHAR_WIDTH*14, LINE_HIGHT * (i + 1), ( settings->flags & _BV(i - SETTINGS_NUM_OF_NUMS) ) ? " ON" : "OFF");
+  		    break;
+	      case NUMBER_ST:
+		      display_int(settings->nums[i], i+1, 16 - settings_num_units[i]);
+          break;
+      }
     }
-    u8g.drawStr(LEFT_MARGIN+ CHAR_WIDTH*10, LINE_HIGHT * 1, settings->note_priority == HIGHEST ? "Highest": " Lowest");
-    u8g.setPrintPos(LEFT_MARGIN+ CHAR_WIDTH*(settings->pitch_bend_semitones<10 ? 14 : 13), LINE_HIGHT * 2);
-    u8g.print(settings->pitch_bend_semitones);
-    u8g.drawStr(LEFT_MARGIN+ CHAR_WIDTH*14, LINE_HIGHT * 3, settings->bend_guards  ? " ON" : "OFF");
-    u8g.drawStr(LEFT_MARGIN+ CHAR_WIDTH*14, LINE_HIGHT * 4, settings->Midi_Monitor ? " ON" : "OFF");
-    u8g.drawStr(LEFT_MARGIN+ CHAR_WIDTH*14, LINE_HIGHT * 5, settings->retrigger    ? " ON" : "OFF");
-    
   } while( u8g.nextPage() );
 }
 
 
 void display_midi_monitor(/* argumets */){
 
-
 }
 
-
+void display_int(int num, int line_num, int left_egdge) {
+  u8g.setPrintPos(LEFT_MARGIN+ CHAR_WIDTH*(num<10 ? left_egdge : left_egdge-1), LINE_HIGHT * line_num);
+  u8g.print(num);
+}
 
 
 

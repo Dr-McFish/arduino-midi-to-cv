@@ -33,7 +33,7 @@ void HandlePitchBend(byte channel, int bend);
 inline void updateNoteAndGate();
 inline void updateMenu();
 
-struct settings_s settings = {HIGHEST, 12, false ,true, false, false, 4};
+struct settings_s settings = {{4, 12}, 0b00010100};
 
 
 void setup() 
@@ -91,13 +91,12 @@ void loop()
 // Loop subrutines
 inline void updateNoteAndGate() {
   int prioritized_note;
-  switch(settings.note_priority){
-    case HIGHEST:
-      prioritized_note = notes_on.highest();
-      break;
-    case LOWEST:
-      prioritized_note = notes_on.lowest();
-      break;
+  if(settings.flags & _BV(NOTE_PRIORITY)){
+    //HIGHEST:
+    prioritized_note = notes_on.highest();
+  } else {
+    //LOWEST:
+    prioritized_note = notes_on.lowest();
   }
 
   if (prioritized_note == -1) {
@@ -107,7 +106,7 @@ inline void updateNoteAndGate() {
   
     //sets PWM on v/oct pin to the appropriate note
     OCR1A = max(0, note_to_volt_per_oct(prioritized_note)
-                    + (pitchbend*settings.pitch_bend_semitones)/480 );
+                    + (pitchbend*settings.nums[PITCH_BEND])/480 );
   }
 }
 
@@ -141,7 +140,7 @@ inline void updateMenu() {
 
 void HandleNoteOn(byte channel, byte pitch, byte velocity) 
 {
-  if(settings.controller_channel == channel) {
+  if(settings.nums[MIDI_CHANNEL] == channel) {
     note_number_t nontenum = midinote_to_notenum(pitch);
 
     notes_on.setb(nontenum);
@@ -154,19 +153,19 @@ void HandleNoteOn(byte channel, byte pitch, byte velocity)
 
 void HandleNoteOff(byte channel, byte pitch, byte velocity) 
 {
-  if(settings.controller_channel == channel) {
+  if(settings.nums[MIDI_CHANNEL] == channel) {
     note_number_t nontenum = midinote_to_notenum(pitch);
 
     notes_on.clearb(nontenum);
 
-    if(settings.note_off_velocity)
+    if(settings.flags & _BV(NOTEOFF_VEL))
       OCR0B = velocity;
   }
 }
 
 void HandleCC(byte channel, byte control_function, byte parameter) 
 {
-  if(settings.controller_channel == channel) {
+  if(settings.nums[MIDI_CHANNEL] == channel) {
     switch(control_function) {
       default:
         break;
@@ -186,7 +185,7 @@ void HandleCC(byte channel, byte control_function, byte parameter)
 }
 
 void HandlePitchBend(byte channel, int bend) {
-  if(settings.controller_channel == channel){
+  if(settings.nums[MIDI_CHANNEL] == channel){
     pitchbend = bend;
     OCR1B = (bend - MIDI_PITCHBEND_MIN)>>4;
   }
@@ -206,9 +205,9 @@ int note_to_volt_per_oct(byte note){
 note_number_t midinote_to_notenum(byte midi_note) {
   int min_note = MIN_NOTE;
   int max_note = MIN_NOTE  + (12*5);
-  if (settings.bend_guards) {
-    min_note += settings.pitch_bend_semitones;
-    max_note -= settings.pitch_bend_semitones;
+  if (settings.flags & _BV(BEND_GUARDS)) {
+    min_note += settings.nums[PITCH_BEND];
+    max_note -= settings.nums[PITCH_BEND];
   }
     
   return max(min_note, min(max_note, midi_note)) - min_note;

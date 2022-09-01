@@ -5,6 +5,8 @@ enum note_priority_e{HIGHEST=true, LOWEST=false};
 struct settings_s{
   int8_t nums[2]; //PITCH_BEND is st, and MIDI_CHANNEL_S
   uint16_t flags;
+  signed int selected_option;
+  bool is_editing;
 };
 # define SETTINGS_NUM_OF_NUMS (sizeof(settings->nums)/sizeof(settings->nums[0]))
 
@@ -66,8 +68,9 @@ const char* onoff_labels[4][2] = {
   {"Highest", " Lowest"}
 };
 
+void edit_settings(int encoder_dir, bool encoder_button, struct settings_s* settings);
 //TODO
-void load_settings_from_EEPROM(struct settings_s* settings);
-void save_settings_to_EEPROM(cosnt struct settings_s* settings);
+//void load_settings_from_EEPROM(struct settings_s* settings);
+//void save_settings_to_EEPROM(cosnt struct settings_s* settings);
 
 #endif

@@ -31,37 +31,23 @@ void display_setup(){
 }
 
 
-void display_options(int encoder_dir, bool encoder_button, struct settings_s* settings){
-  static signed int selected_option = 0;
-  static bool is_editing;
-
-  if (encoder_button){
-    if (setting_type[selected_option] == NUMBER_ST)
-        is_editing = is_editing != encoder_button; /* XOR to flip the value */
-    else if (setting_type[selected_option] == ONOFF_ST || setting_type[selected_option] == ONOFF_LBL_ST){
-      settings->flags ^= _BV((selected_option - SETTINGS_NUM_OF_NUMS)); // ^ XOR to flip the flag
-    }
-  }
-  
-  if(is_editing){
-    settings->nums[selected_option] = max(settings_num_ranges[selected_option].min, min(settings_num_ranges[selected_option].max, settings->nums[selected_option] + encoder_dir));
-  } else {
-    selected_option = modulo(selected_option + encoder_dir, MAX_LINES);
-  }
+void display_options(const struct settings_s* settings){
   
   u8g.firstPage();
   do {
-    u8g.drawBitmapP( is_editing ? 2 : 0, 
-                    4+ selected_option*LINE_HIGHT, 
+    u8g.drawBitmapP( settings->is_editing ? 2 : 0, 
+                    4+ settings->selected_option*LINE_HIGHT, 
                     1, 7, cursor_bitmap);
     for(int i = 0; i < MAX_LINES; i++){
       u8g.drawStr(LEFT_MARGIN, LINE_HIGHT * (i+1), settings_names[i]);
       switch(setting_type[i]){
         case ONOFF_LBL_ST:
-          u8g.drawStr(LEFT_MARGIN+ CHAR_WIDTH*10, LINE_HIGHT * (i + 1), settings->flags & _BV(i  - SETTINGS_NUM_OF_NUMS) ? onoff_labels[i][0]: onoff_labels[i][1]);
+          u8g.drawStr(LEFT_MARGIN+ CHAR_WIDTH*10, LINE_HIGHT * (i + 1),
+                      settings->flags & _BV(i  - SETTINGS_NUM_OF_NUMS) ? onoff_labels[i][0]: onoff_labels[i][1]);
   		    break;
         case ONOFF_ST:
-  		    u8g.drawStr(LEFT_MARGIN+ CHAR_WIDTH*14, LINE_HIGHT * (i + 1), ( settings->flags & _BV(i - SETTINGS_NUM_OF_NUMS) ) ? " ON" : "OFF");
+  		    u8g.drawStr(LEFT_MARGIN+ CHAR_WIDTH*14, LINE_HIGHT * (i + 1),
+                      ( settings->flags & _BV(i - SETTINGS_NUM_OF_NUMS) ) ? " ON" : "OFF");
   		    break;
 	      case NUMBER_ST:
 		      display_int(settings->nums[i], i+1, 16 - settings_num_units[i]);

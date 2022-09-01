@@ -33,7 +33,7 @@ void HandlePitchBend(byte channel, int bend);
 inline void updateNoteAndGate();
 inline void updateMenu();
 
-struct settings_s settings = {{4, 12}, 0b00010100};
+struct settings_s settings = {{4, 12}, 0b00010100, 0, false};
 
 
 void setup() 
@@ -111,16 +111,16 @@ inline void updateNoteAndGate() {
 }
 
 inline void updateMenu() {
-  int ecncoder_dir;
+  int encoder_dir;
   switch(encoder_get()){
     case CW_ST:
-      ecncoder_dir = -1;
+      encoder_dir = -1;
       break;
     case NEUTRAL_ST:
-      ecncoder_dir = 0;
+      encoder_dir = 0;
       break;
     case CCW_ST:
-      ecncoder_dir = 1;
+      encoder_dir = 1;
       break;
   }
   static bool last_button = false;
@@ -128,8 +128,9 @@ inline void updateMenu() {
   bool rising_edge = (!last_button) && button;
   last_button = button;
 
-  if(ecncoder_dir || rising_edge){
-      display_options(ecncoder_dir, button, &settings);
+  if(encoder_dir || rising_edge){
+      edit_settings(encoder_dir, button, &settings);
+      display_options(&settings);
   }
 }
 

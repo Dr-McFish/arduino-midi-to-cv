@@ -111,6 +111,7 @@ inline void updateNoteAndGate() {
 }
 
 inline void updateMenu() {
+  // encoder rotation
   int encoder_dir;
   switch(encoder_get()){
     case CW_ST:
@@ -123,15 +124,33 @@ inline void updateMenu() {
       encoder_dir = 1;
       break;
   }
+
+  // encoder_button
   static bool last_button = false;
+  static int debounce_time = 0;
+  
   bool button = ((~PINC) & _BV(enc_btn_pin_bitmask));
   bool rising_edge = (!last_button) && button;
+  bool button_press;
   last_button = button;
+  
+  if(rising_edge) {
+    if(debounce_time == 0) {
+      debounce_time = 2000; // TODO ajust
+      button_press = true;
+    } else {
+      button_press = false;
+      debounce_time += 200;
+    }
+  }
 
-  if(encoder_dir || rising_edge){
-      edit_settings(encoder_dir, button, &settings);
+  if(encoder_dir || button_press){
+      edit_settings(encoder_dir, button_press, &settings);
       display_options(&settings);
   }
+
+  if(debounce_time > 0)
+    debounce_time--;
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------

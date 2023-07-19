@@ -68,7 +68,7 @@ void setup()
   OCR1B = 0x01Ff; // pin D10 pwm value (0-1023) (pitchbend)
 
   pinMode(6, OUTPUT); // Mod Wheel
-  pinMode(5, OUTPUT); // undefined
+  pinMode(5, OUTPUT); // Velocity
   // ------------------------------------------------ TIMER 0 ------------------------------------------------
   //        Enable PWM pin D6              Enable PWM pin D5                Fast PWM mode
   //        Clear OC0A on compare match    Clear OC0B on compare match      TOP = 0xFF;

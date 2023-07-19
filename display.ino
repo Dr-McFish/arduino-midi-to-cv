@@ -7,7 +7,7 @@
 # define LEFT_MARGIN 7
 # define MAX_LINES (64/LINE_HIGHT)
 
-U8GLIB_SH1106_128X64 u8g(8, 7, 4); // SCK=13, MOSI=11, CS=8, DC=7, Reset=4
+U8GLIB_SH1106_128X64 u8g(8, 7, 1); // SCK=13, MOSI=11, CS=8, DC=7, Reset=1
 
 const uint8_t cursor_bitmap[] U8G_PROGMEM = {
   0b01000000,

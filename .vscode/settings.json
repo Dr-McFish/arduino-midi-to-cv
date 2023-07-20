@@ -1,0 +1,5 @@
+{
+	"arduino.useArduinoCli": true,
+	"arduino.analyzeOnOpen": true,
+	"arduino.disableIntelliSenseAutoGen": true
+}

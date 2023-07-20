@@ -13,7 +13,7 @@ typedef int note_number_t; /* 0 - 60; MIN_NOTE is 0 */
 int pitchbend = 0;
 
 BoolArray notes_on = BoolArray();
-MIDI_CREATE_DEFAULT_INSTANCE();
+MIDI_CREATE_INSTANCE(HardwareSerial, Serial, MIDI);
 
 const int gate_pin = 4; // D4 -> pin PD4 on Atmega328p
 const int gate_pin_bitmask = 4; // bit 4 on the `PORTD` register
@@ -190,7 +190,7 @@ void HandleCC(byte channel, byte control_function, byte parameter)
       default:
         break;
       case midi::ModulationWheel : //MSB
-        OCR0A = ((unsigned byte)parameter) * 2;
+        OCR0A = ((uint8_t)parameter) * 2;
         break;
       case midi::ModulationWheel + 32 : //LSB
         OCR0A &= 0x11111110;

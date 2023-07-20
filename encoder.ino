@@ -9,7 +9,7 @@ volatile byte aFlag = 0; // let's us know when we're expecting a rising edge on 
 volatile byte bFlag = 0; // let's us know when we're expecting a rising edge on ENCODER_PIN_B to signal that the encoder has arrived at a detent (opposite direction to when aFlag is set)
 volatile byte reading = 0; //somewhere to store the direct values we read from our interrupt pins before checking to see if we have moved a whole detent
 
-volatile byte encoder_state = NEUTRAL_ST;
+volatile enum ENCODER_STATE encoder_state = NEUTRAL_ST;
 
 void setup_encoder() {
   pinMode(ENCODER_PIN_A, INPUT_PULLUP); // set ENCODER_PIN_A as an input, pulled HIGH to the logic voltage (5V or 3.3V for most cases)

@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 int main(){
-	Bool_array testbool;
+	BoolArray testbool;
 
 	for (int i = 0; i < BOOL_ARRAY_SIZE*16; i++)
 	{
@@ -11,7 +11,7 @@ int main(){
 	
 	for (int i = 0; i < BOOL_ARRAY_SIZE*16; i++)
 	{
-		testbool.set(i, (i % 4) == 0);
+		testbool.setb(i);
 	}
 
 	putchar('\n');

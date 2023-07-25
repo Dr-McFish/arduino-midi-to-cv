@@ -12,45 +12,45 @@ volatile byte reading = 0; //somewhere to store the direct values we read from o
 volatile enum ENCODER_STATE encoder_state = NEUTRAL_ST;
 
 void setup_encoder() {
-  pinMode(ENCODER_PIN_A, INPUT_PULLUP); // set ENCODER_PIN_A as an input, pulled HIGH to the logic voltage (5V or 3.3V for most cases)
-  pinMode(ENCODER_PIN_B, INPUT_PULLUP); // set ENCODER_PIN_B as an input, pulled HIGH to the logic voltage (5V or 3.3V for most cases)
-  attachInterrupt(0,PinA,RISING); // set an interrupt on PinA, looking for a rising edge signal and executing the "PinA" Interrupt Service Routine (below)
-  attachInterrupt(1,PinB,RISING); // set an interrupt on PinB, looking for a rising edge signal and executing the "PinB" Interrupt Service Routine (below)
+	pinMode(ENCODER_PIN_A, INPUT_PULLUP); // set ENCODER_PIN_A as an input, pulled HIGH to the logic voltage (5V or 3.3V for most cases)
+	pinMode(ENCODER_PIN_B, INPUT_PULLUP); // set ENCODER_PIN_B as an input, pulled HIGH to the logic voltage (5V or 3.3V for most cases)
+	attachInterrupt(0,PinA,RISING); // set an interrupt on PinA, looking for a rising edge signal and executing the "PinA" Interrupt Service Routine (below)
+	attachInterrupt(1,PinB,RISING); // set an interrupt on PinB, looking for a rising edge signal and executing the "PinB" Interrupt Service Routine (below)
 }
 
 void PinA(){
-  cli(); //stop interrupts happening before we read pin values
-  reading = PIND & 0xC; // read all eight pin values then strip away all but ENCODER_PIN_A and ENCODER_PIN_B's values
-  if(reading == B00001100 && aFlag) { //check that we have both pins at detent (HIGH) and that we are expecting detent on this pin's rising edge
-    encoder_state = CCW_ST;
-    bFlag = 0; //reset flags for the next turn
-    aFlag = 0; //reset flags for the next turn
-  }
-  else if (reading == B00000100) bFlag = 1; //signal that we're expecting ENCODER_PIN_B to signal the transition to detent from free rotation
-  sei(); //restart interrupts
+	cli(); //stop interrupts happening before we read pin values
+	reading = PIND & 0xC; // read all eight pin values then strip away all but ENCODER_PIN_A and ENCODER_PIN_B's values
+	if(reading == B00001100 && aFlag) { //check that we have both pins at detent (HIGH) and that we are expecting detent on this pin's rising edge
+		encoder_state = CCW_ST;
+		bFlag = 0; //reset flags for the next turn
+		aFlag = 0; //reset flags for the next turn
+	}
+	else if (reading == B00000100) bFlag = 1; //signal that we're expecting ENCODER_PIN_B to signal the transition to detent from free rotation
+	sei(); //restart interrupts
 }
 
 void PinB(){
-  cli(); //stop interrupts happening before we read pin values
-  reading = PIND & 0xC; //read all eight pin values then strip away all but ENCODER_PIN_A and ENCODER_PIN_B's values
-  if (reading == B00001100 && bFlag) { //check that we have both pins at detent (HIGH) and that we are expecting detent on this pin's rising edge
-    encoder_state = CW_ST;
-    bFlag = 0; //reset flags for the next turn
-    aFlag = 0; //reset flags for the next turn
-  }
-  else if (reading == B00001000) aFlag = 1; //signal that we're expecting ENCODER_PIN_A to signal the transition to detent from free rotation
-  sei(); //restart interrupts
+	cli(); //stop interrupts happening before we read pin values
+	reading = PIND & 0xC; //read all eight pin values then strip away all but ENCODER_PIN_A and ENCODER_PIN_B's values
+	if (reading == B00001100 && bFlag) { //check that we have both pins at detent (HIGH) and that we are expecting detent on this pin's rising edge
+		encoder_state = CW_ST;
+		bFlag = 0; //reset flags for the next turn
+		aFlag = 0; //reset flags for the next turn
+	}
+	else if (reading == B00001000) aFlag = 1; //signal that we're expecting ENCODER_PIN_A to signal the transition to detent from free rotation
+	sei(); //restart interrupts
 }
 
 enum ENCODER_STATE encoder_get() {
-  cli();
-  if (encoder_state != NEUTRAL_ST) {
-    enum ENCODER_STATE temp = encoder_state;
-    encoder_state = NEUTRAL_ST;
-    sei();
-    return temp;
-  } else {
-    sei();
-    return encoder_state;
-  }
+	cli();
+	if (encoder_state != NEUTRAL_ST) {
+		enum ENCODER_STATE temp = encoder_state;
+		encoder_state = NEUTRAL_ST;
+		sei();
+		return temp;
+	} else {
+		sei();
+		return encoder_state;
+	}
 }

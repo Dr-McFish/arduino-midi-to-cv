@@ -14,10 +14,10 @@ public:
 	BoolArray ();
 	bool operator[](int idx);
 	void setb(int idx);
-  void clearb(int idx);
-  void clear_all();
-  int lowest();
-  int highest();
+	void clearb(int idx);
+	void clear_all();
+	int lowest();
+	int highest();
 private:
 	bool_unit p_bools[BOOL_ARRAY_SIZE];
 };

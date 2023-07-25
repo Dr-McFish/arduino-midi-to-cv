@@ -4624,7 +4624,7 @@
   (symbol (lib_id "Device:C") (at 131.445 72.39 0) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 070c7c96-4e3c-4ae0-a050-b63e12998eb5)
-    (property "Reference" "C?" (id 0) (at 133.985 71.755 0)
+    (property "Reference" "C7" (id 0) (at 133.985 71.755 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "100nF" (id 1) (at 133.858 73.914 0)
@@ -4696,7 +4696,7 @@
   (symbol (lib_id "Device:R_US") (at 224.155 149.86 270) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 143c319a-5f2e-4c16-b50e-af6e599d7112)
-    (property "Reference" "R?" (id 0) (at 220.98 147.955 90))
+    (property "Reference" "R19" (id 0) (at 220.98 147.955 90))
     (property "Value" "10k*" (id 1) (at 226.06 147.955 90))
     (property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" (id 2) (at 223.901 150.876 90)
       (effects (font (size 1.27 1.27)) hide)
@@ -4745,7 +4745,7 @@
   (symbol (lib_id "Reference_Voltage:LM4040LP-2.0") (at 106.68 68.58 90) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 1d803098-e280-4368-b1e5-dd5f07fa7637)
-    (property "Reference" "U?" (id 0) (at 109.22 67.3099 90)
+    (property "Reference" "U4" (id 0) (at 109.22 67.3099 90)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "LM4040LP-2.0" (id 1) (at 101.6 60.96 0)
@@ -4814,7 +4814,7 @@
   (symbol (lib_id "Device:R_US") (at 249.555 146.05 270) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 228ee498-5c58-4f20-888f-f1ee6bfee005)
-    (property "Reference" "R?" (id 0) (at 249.555 143.51 90))
+    (property "Reference" "R26" (id 0) (at 249.555 143.51 90))
     (property "Value" "680k" (id 1) (at 249.555 140.97 90))
     (property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" (id 2) (at 249.301 147.066 90)
       (effects (font (size 1.27 1.27)) hide)
@@ -4899,7 +4899,7 @@
   (symbol (lib_id "power:Earth") (at 127.635 78.105 0) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 283645a7-2b34-4276-9799-e1b13f65814a)
-    (property "Reference" "#PWR?" (id 0) (at 127.635 84.455 0)
+    (property "Reference" "#PWR03" (id 0) (at 127.635 84.455 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "Earth" (id 1) (at 127.635 81.915 0)
@@ -4978,7 +4978,7 @@
   (symbol (lib_id "power:+5V") (at 123.825 68.58 90) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 3c6197dd-eba0-4fbf-8db8-e4cdf3cbd600)
-    (property "Reference" "#PWR?" (id 0) (at 127.635 68.58 0)
+    (property "Reference" "#PWR02" (id 0) (at 127.635 68.58 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+5V" (id 1) (at 126.365 70.485 90)
@@ -5012,7 +5012,7 @@
   (symbol (lib_id "Switch:SW_DPDT_x2") (at 165.1 120.015 0) (unit 2)
     (in_bom yes) (on_board yes)
     (uuid 42f2079e-29d8-4893-9f79-d4fdb2595884)
-    (property "Reference" "SW?" (id 0) (at 165.1 111.76 0))
+    (property "Reference" "SW2" (id 0) (at 165.1 111.76 0))
     (property "Value" "SW_DPDT mix bend" (id 1) (at 167.64 114.935 0))
     (property "Footprint" "" (id 2) (at 165.1 120.015 0)
       (effects (font (size 1.27 1.27)) hide)
@@ -5028,7 +5028,7 @@
   (symbol (lib_id "power:Earth") (at 173.99 121.285 0) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 44cb53ff-72b2-4293-a955-f011147c74f0)
-    (property "Reference" "#PWR?" (id 0) (at 173.99 127.635 0)
+    (property "Reference" "#PWR04" (id 0) (at 173.99 127.635 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "Earth" (id 1) (at 173.99 125.095 0)
@@ -5352,7 +5352,7 @@
   (symbol (lib_id "Device:R_US") (at 220.345 99.06 90) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 6b8d398a-37a7-4153-bc42-7bd2f2633efa)
-    (property "Reference" "R?" (id 0) (at 220.345 92.71 90))
+    (property "Reference" "R5" (id 0) (at 220.345 92.71 90))
     (property "Value" "10k" (id 1) (at 220.345 95.25 90))
     (property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" (id 2) (at 220.599 98.044 90)
       (effects (font (size 1.27 1.27)) hide)
@@ -5367,7 +5367,7 @@
   (symbol (lib_id "Analog_DAC:MCP4922-EP") (at 148.59 63.5 0) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 6dfd06b6-4e2a-4c77-a4a5-5eb637e08f8f)
-    (property "Reference" "U?" (id 0) (at 154.94 62.23 0))
+    (property "Reference" "U5" (id 0) (at 154.94 62.23 0))
     (property "Value" "MCP4922-EP" (id 1) (at 154.94 64.77 0))
     (property "Footprint" "" (id 2) (at 148.59 63.5 0)
       (effects (font (size 1.27 1.27) italic) hide)
@@ -5394,7 +5394,7 @@
   (symbol (lib_id "power:+5V") (at 103.505 50.8 90) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 6e01fd89-23ed-45c8-b139-0c613ce0f470)
-    (property "Reference" "#PWR?" (id 0) (at 107.315 50.8 0)
+    (property "Reference" "#PWR01" (id 0) (at 107.315 50.8 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+5V" (id 1) (at 100.33 50.7999 90)
@@ -5531,7 +5531,7 @@
   (symbol (lib_id "Connector:AudioJack2") (at 278.765 148.59 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 7dc92ef9-68ed-439a-b115-f95b89f4e0ef)
-    (property "Reference" "J?" (id 0) (at 283.845 147.9549 0)
+    (property "Reference" "J5" (id 0) (at 283.845 147.9549 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "V/oct OUT" (id 1) (at 276.86 155.067 0)
@@ -5636,7 +5636,7 @@
   (symbol (lib_id "Device:R_US") (at 252.73 151.13 90) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 829bb942-1ad9-405f-90af-2aa543cc9641)
-    (property "Reference" "R?" (id 0) (at 252.73 153.67 90))
+    (property "Reference" "R30" (id 0) (at 252.73 153.67 90))
     (property "Value" "1k" (id 1) (at 252.73 156.21 90))
     (property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" (id 2) (at 252.984 150.114 90)
       (effects (font (size 1.27 1.27)) hide)
@@ -5714,7 +5714,7 @@
   (symbol (lib_id "Device:R_US") (at 241.3 149.86 270) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 85863db3-63aa-4ee8-8f0f-6d06dca2c02d)
-    (property "Reference" "R?" (id 0) (at 241.173 147.574 90))
+    (property "Reference" "R24" (id 0) (at 241.173 147.574 90))
     (property "Value" "10k*" (id 1) (at 241.3 151.892 90))
     (property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" (id 2) (at 241.046 150.876 90)
       (effects (font (size 1.27 1.27)) hide)
@@ -5785,7 +5785,7 @@
   (symbol (lib_id "Device:R_US") (at 106.68 55.245 180) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 8a559e79-bcce-4d31-a838-a3657b38dd83)
-    (property "Reference" "R?" (id 0) (at 109.22 53.9749 0)
+    (property "Reference" "R4" (id 0) (at 109.22 53.9749 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "3k" (id 1) (at 109.22 56.5149 0)
@@ -6216,7 +6216,7 @@
   (symbol (lib_id "power:Earth") (at 272.415 158.115 0) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid bfb1cf5d-d7ba-44c3-81e7-779fb41f66ca)
-    (property "Reference" "#PWR?" (id 0) (at 272.415 164.465 0)
+    (property "Reference" "#PWR05" (id 0) (at 272.415 164.465 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "Earth" (id 1) (at 272.415 161.925 0)
@@ -6606,7 +6606,7 @@
   (symbol (lib_id "Device:R_US") (at 224.155 154.94 270) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid ec0cc489-11d5-4092-9530-c915b3953a91)
-    (property "Reference" "R?" (id 0) (at 224.028 152.654 90))
+    (property "Reference" "R21" (id 0) (at 224.028 152.654 90))
     (property "Value" "20k" (id 1) (at 224.155 156.972 90))
     (property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" (id 2) (at 223.901 155.956 90)
       (effects (font (size 1.27 1.27)) hide)
@@ -6639,7 +6639,7 @@
   (symbol (lib_id "Switch:SW_DPDT_x2") (at 262.89 148.59 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid f68525ea-73f0-4559-9863-e7aba16007a1)
-    (property "Reference" "SW?" (id 0) (at 259.715 142.875 0))
+    (property "Reference" "SW3" (id 0) (at 259.715 142.875 0))
     (property "Value" "SW_DPDT_Use bend" (id 1) (at 266.065 140.335 0))
     (property "Footprint" "" (id 2) (at 262.89 148.59 0)
       (effects (font (size 1.27 1.27)) hide)
@@ -6710,6 +6710,21 @@
   )
 
   (symbol_instances
+    (path "/6e01fd89-23ed-45c8-b139-0c613ce0f470"
+      (reference "#PWR01") (unit 1) (value "+5V") (footprint "")
+    )
+    (path "/3c6197dd-eba0-4fbf-8db8-e4cdf3cbd600"
+      (reference "#PWR02") (unit 1) (value "+5V") (footprint "")
+    )
+    (path "/283645a7-2b34-4276-9799-e1b13f65814a"
+      (reference "#PWR03") (unit 1) (value "Earth") (footprint "")
+    )
+    (path "/44cb53ff-72b2-4293-a955-f011147c74f0"
+      (reference "#PWR04") (unit 1) (value "Earth") (footprint "")
+    )
+    (path "/bfb1cf5d-d7ba-44c3-81e7-779fb41f66ca"
+      (reference "#PWR05") (unit 1) (value "Earth") (footprint "")
+    )
     (path "/475621be-144c-46a6-a5ac-f365d463488e"
       (reference "#PWR0101") (unit 1) (value "Earth") (footprint "")
     )
@@ -6830,21 +6845,6 @@
     (path "/eac3df67-e470-466f-a853-086063634916"
       (reference "#PWR0148") (unit 1) (value "Earth") (footprint "")
     )
-    (path "/283645a7-2b34-4276-9799-e1b13f65814a"
-      (reference "#PWR?") (unit 1) (value "Earth") (footprint "")
-    )
-    (path "/3c6197dd-eba0-4fbf-8db8-e4cdf3cbd600"
-      (reference "#PWR?") (unit 1) (value "+5V") (footprint "")
-    )
-    (path "/44cb53ff-72b2-4293-a955-f011147c74f0"
-      (reference "#PWR?") (unit 1) (value "Earth") (footprint "")
-    )
-    (path "/6e01fd89-23ed-45c8-b139-0c613ce0f470"
-      (reference "#PWR?") (unit 1) (value "+5V") (footprint "")
-    )
-    (path "/bfb1cf5d-d7ba-44c3-81e7-779fb41f66ca"
-      (reference "#PWR?") (unit 1) (value "Earth") (footprint "")
-    )
     (path "/c61d88da-7658-4dcd-8503-98754b105ec0"
       (reference "A1") (unit 1) (value "Arduino_Nano_v3.x") (footprint "Module:Arduino_Nano")
     )
@@ -6866,6 +6866,9 @@
     (path "/473806b3-fd1d-4d86-bd65-f2552e8a0a79"
       (reference "C6") (unit 1) (value "100nF") (footprint "Capacitor_THT:C_Disc_D3.0mm_W1.6mm_P2.50mm")
     )
+    (path "/070c7c96-4e3c-4ae0-a050-b63e12998eb5"
+      (reference "C7") (unit 1) (value "100nF") (footprint "Capacitor_THT:C_Disc_D3.0mm_W1.6mm_P2.50mm")
+    )
     (path "/78e52f76-ace8-47a2-9210-968bc2cb0ec6"
       (reference "C8") (unit 1) (value "100nF") (footprint "Capacitor_THT:C_Disc_D3.0mm_W1.6mm_P2.50mm")
     )
@@ -6877,9 +6880,6 @@
     )
     (path "/1148ea17-f72d-4027-878a-00d05297fe2d"
       (reference "C13") (unit 1) (value "10uf") (footprint "Capacitor_THT:CP_Radial_D5.0mm_P2.50mm")
-    )
-    (path "/070c7c96-4e3c-4ae0-a050-b63e12998eb5"
-      (reference "C?") (unit 1) (value "100nF") (footprint "Capacitor_THT:C_Disc_D3.0mm_W1.6mm_P2.50mm")
     )
     (path "/e3c72506-f3b5-4379-87e1-4f840fb287d1"
       (reference "D1") (unit 1) (value "1N4148") (footprint "Diode_THT:D_DO-35_SOD27_P2.54mm_Vertical_AnodeUp")
@@ -6917,14 +6917,14 @@
     (path "/01fd11d6-82fe-4a7b-bf0b-253226749809"
       (reference "J4") (unit 1) (value "MOD WHEEL") (footprint "Library:Jack breakcout cables")
     )
+    (path "/7dc92ef9-68ed-439a-b115-f95b89f4e0ef"
+      (reference "J5") (unit 1) (value "V/oct OUT") (footprint "Library:Jack breakcout cables")
+    )
     (path "/a729fa67-e9c3-4cca-a426-db224325efad"
       (reference "J6") (unit 1) (value "Power connector") (footprint "Connector_JST:JST_XH_B5B-XH-A_1x05_P2.50mm_Vertical")
     )
     (path "/8469cffa-dd87-4ad6-a241-739121779e0b"
       (reference "J7") (unit 1) (value "Eurorack power connector") (footprint "Connector_IDC:IDC-Header_2x08_P2.54mm_Vertical")
-    )
-    (path "/7dc92ef9-68ed-439a-b115-f95b89f4e0ef"
-      (reference "J?") (unit 1) (value "V/oct OUT") (footprint "Library:Jack breakcout cables")
     )
     (path "/c2d47c3b-35f2-4596-a8a1-a5c27a9980c0"
       (reference "JP1") (unit 1) (value "GEN_5V_Arduino") (footprint "Jumper:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm")
@@ -6961,6 +6961,12 @@
     )
     (path "/2abd51c5-4399-4233-8154-989eab325168"
       (reference "R3") (unit 1) (value "1k") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
+    )
+    (path "/8a559e79-bcce-4d31-a838-a3657b38dd83"
+      (reference "R4") (unit 1) (value "3k") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
+    )
+    (path "/6b8d398a-37a7-4153-bc42-7bd2f2633efa"
+      (reference "R5") (unit 1) (value "10k") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
     )
     (path "/1f96b275-2617-46da-b459-945f7c54107a"
       (reference "R6") (unit 1) (value "1k") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
@@ -7001,8 +7007,14 @@
     (path "/8eed701f-673b-4e13-ac9c-fd8d6cb1250a"
       (reference "R18") (unit 1) (value "1k") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
     )
+    (path "/143c319a-5f2e-4c16-b50e-af6e599d7112"
+      (reference "R19") (unit 1) (value "10k*") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
+    )
     (path "/31666409-950a-4f15-a13a-c241485a081f"
       (reference "R20") (unit 1) (value "4k7") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
+    )
+    (path "/ec0cc489-11d5-4092-9530-c915b3953a91"
+      (reference "R21") (unit 1) (value "20k") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
     )
     (path "/2843bbc8-005b-4fb9-880a-b862dd4a88c0"
       (reference "R22") (unit 1) (value "10k") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
@@ -7010,8 +7022,14 @@
     (path "/6336b02f-fa83-458d-82fe-55abf14ef928"
       (reference "R23") (unit 1) (value "10k") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
     )
+    (path "/85863db3-63aa-4ee8-8f0f-6d06dca2c02d"
+      (reference "R24") (unit 1) (value "10k*") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
+    )
     (path "/a1d42f97-c0eb-4d08-905c-382369b4c762"
       (reference "R25") (unit 1) (value "100k") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical")
+    )
+    (path "/228ee498-5c58-4f20-888f-f1ee6bfee005"
+      (reference "R26") (unit 1) (value "680k") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
     )
     (path "/4951fc78-99db-494d-a57a-b7706ca8377b"
       (reference "R27") (unit 1) (value "100k") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical")
@@ -7022,38 +7040,20 @@
     (path "/b209c77b-2572-4a4e-a684-9c43b6d393e9"
       (reference "R29") (unit 1) (value "3.3k") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
     )
+    (path "/829bb942-1ad9-405f-90af-2aa543cc9641"
+      (reference "R30") (unit 1) (value "1k") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
+    )
     (path "/032b1b31-c0b4-47ce-a2a7-97e9b74419b9"
       (reference "R33") (unit 1) (value "1k") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
-    )
-    (path "/143c319a-5f2e-4c16-b50e-af6e599d7112"
-      (reference "R?") (unit 1) (value "10k*") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
-    )
-    (path "/228ee498-5c58-4f20-888f-f1ee6bfee005"
-      (reference "R?") (unit 1) (value "680k") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
-    )
-    (path "/6b8d398a-37a7-4153-bc42-7bd2f2633efa"
-      (reference "R?") (unit 1) (value "10k") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
-    )
-    (path "/829bb942-1ad9-405f-90af-2aa543cc9641"
-      (reference "R?") (unit 1) (value "1k") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
-    )
-    (path "/85863db3-63aa-4ee8-8f0f-6d06dca2c02d"
-      (reference "R?") (unit 1) (value "10k*") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
-    )
-    (path "/8a559e79-bcce-4d31-a838-a3657b38dd83"
-      (reference "R?") (unit 1) (value "3k") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
-    )
-    (path "/ec0cc489-11d5-4092-9530-c915b3953a91"
-      (reference "R?") (unit 1) (value "20k") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
     )
     (path "/7fcfdd97-41c0-4e56-a099-dadeefcaa670"
       (reference "SW1") (unit 1) (value "RotaryEncoder_Switch") (footprint "Rotary_Encoder:RotaryEncoder_Alps_EC11E-Switch_Vertical_H20mm")
     )
-    (path "/f68525ea-73f0-4559-9863-e7aba16007a1"
-      (reference "SW?") (unit 1) (value "SW_DPDT_Use bend") (footprint "")
-    )
     (path "/42f2079e-29d8-4893-9f79-d4fdb2595884"
-      (reference "SW?") (unit 2) (value "SW_DPDT mix bend") (footprint "")
+      (reference "SW2") (unit 2) (value "SW_DPDT mix bend") (footprint "")
+    )
+    (path "/f68525ea-73f0-4559-9863-e7aba16007a1"
+      (reference "SW3") (unit 1) (value "SW_DPDT_Use bend") (footprint "")
     )
     (path "/b8e27a60-8fb7-41a6-b55b-ee95237345ce"
       (reference "U1") (unit 1) (value "TL074") (footprint "Package_DIP:DIP-14_W7.62mm_Socket")
@@ -7077,10 +7077,10 @@
       (reference "U3") (unit 1) (value "OLED_Display_SPI") (footprint "Dr_McFishs_misc_footprints:SPI Oled dislay SH1106")
     )
     (path "/1d803098-e280-4368-b1e5-dd5f07fa7637"
-      (reference "U?") (unit 1) (value "LM4040LP-2.0") (footprint "Package_TO_SOT_THT:TO-92_Inline")
+      (reference "U4") (unit 1) (value "LM4040LP-2.0") (footprint "Package_TO_SOT_THT:TO-92_Inline")
     )
     (path "/6dfd06b6-4e2a-4c77-a4a5-5eb637e08f8f"
-      (reference "U?") (unit 1) (value "MCP4922-EP") (footprint "")
+      (reference "U5") (unit 1) (value "MCP4922-EP") (footprint "")
     )
   )
 )

@@ -18,6 +18,8 @@
             "includePath": [
                 "C:\\Users\\woosi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
                 "C:\\Users\\woosi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\standard",
+                "C:\\Users\\woosi\\Documents\\Arduino\\libraries\\MCP_DAC",
+                "C:\\Users\\woosi\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\SPI\\src",
                 "C:\\Users\\woosi\\Documents\\Arduino\\libraries\\arduino_midi_library-5.0.2\\src",
                 "C:\\Users\\woosi\\Documents\\Arduino\\libraries\\U8glib\\src",
                 "c:\\users\\woosi\\appdata\\local\\arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7\\lib\\gcc\\avr\\7.3.0\\include",
@@ -30,32 +32,11 @@
             "cStandard": "c11",
             "cppStandard": "c++11",
             "defines": [
-				// AVR-GCC is used.
-				"AVR=1",
-				"__AVR=1",
-
-				// The architecture of ATmega328P is AVR5.
-				"__AVR_ARCH__=5",
-				"__AVR_MEGA__",
-				"__AVR_ENHANCED__",
-				"__AVR_HAVE_JMP_CALL__",
-				"__AVR_HAVE_MOVW__",
-				"__AVR_HAVE_LPMX__",
-				"__AVR_HAVE_MUL__",
-				"__AVR_2_BYTE_PC__",
-
-				// The MCU type is ATmega328P.
-				"__AVR_ATmega328P__",
-
-				// Additional command line define statements.
-				"F_CPU=16000000L",
-				"ARDUINO=10607",
-				"ARDUINO_AVR_UNO",
-				"ARDUINO_ARCH_AVR",
                 "F_CPU=16000000L",
                 "ARDUINO=10607",
                 "ARDUINO_AVR_UNO",
                 "ARDUINO_ARCH_AVR",
+                "__AVR_ATmega2560__",
                 "__DBL_MIN_EXP__=(-125)",
                 "__HQ_FBIT__=15",
                 "__cpp_attributes=200809",

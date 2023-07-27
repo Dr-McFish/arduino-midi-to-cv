@@ -1,10 +1,13 @@
 {
-    "port": "COM1",
+    "port": "COM3",
     "board": "arduino:avr:uno",
     "programmer": "avrispmkii",
     "sketch": "midi_to_cv.ino",
-		"output": "build",
-		"buildPreferences": [
-			["build.extra_flags", "-mmcu=atmega328p -D__AVR_ATmega2560__"]
-		]
+    "output": "build",
+    "buildPreferences": [
+        [
+            "build.extra_flags",
+            "-mmcu=atmega328p -D__AVR_ATmega2560__"
+        ]
+    ]
 }

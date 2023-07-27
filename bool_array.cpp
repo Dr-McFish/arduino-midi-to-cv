@@ -14,32 +14,38 @@ void BoolArray::setb(int idx) {
 }
 
 void BoolArray::clearb(int idx) {
-  p_bools[idx / sizeof(bool_unit)] &= ~(1 << (idx % sizeof(bool_unit)));
+	p_bools[idx / sizeof(bool_unit)] &= ~(1 << (idx % sizeof(bool_unit)));
 }
 
 void BoolArray::clear_all() {
-  for(int i = 0; i < BOOL_ARRAY_SIZE; i++)
-    p_bools[i] = 0;
+	for(int i = 0; i < BOOL_ARRAY_SIZE; i++)
+		p_bools[i] = 0;
 }
 
 int BoolArray::highest() {
-  int rt = -1;
-  for(int i = 0; i < BOOL_ARRAY_SIZE; i++){
-    for(int j = 0; p_bools[i] >> j; j++){
-      rt = i*sizeof(bool_unit) +j;
-    }
-  }
+	int rt = -1;
+	for(int i = 0; i < BOOL_ARRAY_SIZE; i++){
+		for(int j = 0; p_bools[i] >> j; j++){
+			rt = i*sizeof(bool_unit) +j;
+		}
+	}
+	// for(int i = 0; i < BOOL_ARRAY_SIZE_BITS; i++) {
+	// 	if((*this)[i]) {
+	// 		rt = i;
+	// 	}
+	// }
 
-  return rt;
+	return rt;
 }
 
 int BoolArray::lowest(){
-  int rt = -1;
-  for(int i = BOOL_ARRAY_SIZE - 1; i >= 0; i--){
-    for(int j = 0; p_bools[i] >> j; j++){
-      rt = (i+1)*sizeof(bool_unit) - j;
-    }
-  }
+	int rt = -1;
 
-  return rt;
+	for(int i = BOOL_ARRAY_SIZE_BITS - 1; i >= 0; i--) {
+		if((*this)[i]) {
+			rt = i;
+		}
+	}
+
+	return rt;
 }

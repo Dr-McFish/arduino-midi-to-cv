@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 
-#define BOOL_ARRAY_SIZE_BITS 64
+#define BOOL_ARRAY_SIZE_BITS 128
 
 typedef uint16_t bool_unit; //either uint16_t or uint8_t. unsure
 
